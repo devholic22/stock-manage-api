@@ -1,0 +1,25 @@
+{
+  "name": "stock-manage-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/devholic22/stock-manage-api.git",
+  "author": "Hyunjoon Choi <90085154+devholic22@users.noreply.github.com>",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "babel-node ./src/index.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^8.5.1",
+    "lowdb": "^5.0.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.2",
+    "@babel/node": "^7.20.2",
+    "@babel/preset-env": "^7.20.2"
+  }
+}
