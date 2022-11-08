@@ -7,8 +7,7 @@ import { JSONFile } from "lowdb/node";
 
 // File path
 export const createConnection = async () => {
-  const __dirname = dirname(fileURLToPath(import.meta.url));
-  const file = join(__dirname, "db.json");
+  const file = join(process.cwd(), "src/db/db.json");
 
   // Configure lowdb to write to JSONFile
   const adapter = new JSONFile(file);
