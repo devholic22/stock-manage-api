@@ -5,9 +5,7 @@ export let db;
 
 export const createConnection = async () => {
   // Use JSON file for storage
-  console.log(process.cwd());
   const file = join(process.cwd(), "src/db/db.json");
-  console.log(file);
   const adapter = new JSONFile(file);
   db = new Low(adapter);
 
