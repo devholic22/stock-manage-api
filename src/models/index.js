@@ -15,7 +15,7 @@ export const createConnection = async () => {
   // If file.json doesn't exist, db.data will be null
   // Set default data
   // db.data = db.data || { posts: [] } // Node < v15.x
-  db.data ||= {}; // Node >= 15.x
+  db.data ||= { users: [], company: [] }; // Node >= 15.x
 
   // Create and query items using plain JS
   // db.data.posts.push("hello world");
