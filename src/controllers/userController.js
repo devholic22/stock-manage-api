@@ -61,21 +61,13 @@ export const postJoinUser = async (req, res) => {
 };
 
 export const postLogin = async (req, res) => {
-  const { comCode, id, password } = req.body;
-
-  const company = Company.findByCode(comCode);
-
-  if (!company) {
-    return res.json({
-      error: "등록되지 않은 회사입니다."
-    });
-  }
+  const { id, password } = req.body;
 
   const user = User.findById(id);
 
-  if (!user || user.comCode !== company.comCode) {
+  if (!user) {
     return res.json({
-      error: "해당 아이디의 유저가 없거나 유저의 회사 코드가 일치하지 않습니다."
+      error: "해당 아이디의 유저가 없습니다."
     });
   }
 
