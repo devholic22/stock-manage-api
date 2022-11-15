@@ -3,11 +3,13 @@ import User from "../models/User.js";
 
 const authMiddleware = async (req, res, next) => {
   try {
-    req.decoded = jwt.verify(req.headers.authorization, process.env.JWT_SECRET);
+    req.decoded = jwt.verify(
+      req.headers.authorization.split(" ")[1],
+      process.env.JWT_SECRET
+    );
 
-    const { number } = req.decoded;
-
-    const user = User.findByNumber(number);
+    const { user_number, user_com } = req.decoded;
+    const user = User.findByNumber(user_number);
 
     if (!user) {
       return res.json({
@@ -15,7 +17,7 @@ const authMiddleware = async (req, res, next) => {
       });
     }
     // 이진 탐색 가능하도록 하기 위함
-    req.user = number;
+    req.user = { user_number, user_com };
 
     return next();
   } catch (error) {

@@ -78,9 +78,12 @@ export const postLogin = async (req, res) => {
     });
   }
 
+  const userCompany = Company.findByCode(user.comCode);
+
   const token = jwt.sign(
     {
-      number: user.number
+      user_number: user.number,
+      user_com: userCompany.number
     },
     process.env.JWT_SECRET,
     {
