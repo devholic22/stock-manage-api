@@ -1,8 +1,8 @@
 import { db } from "../models/index.js";
 
-class Item {
+class Stock {
   constructor(type, origin, name, size, unit, price, company) {
-    this.number = db.data?.item.length + 1;
+    this.number = db.data?.stocks.length + 1;
     this.type = type; // 분류
     this.origin = origin; // 제조사
     this.name = name; // 품명
@@ -13,26 +13,26 @@ class Item {
   }
 
   static async create(type, origin, name, size, unit, price, company) {
-    const item = new Item(type, origin, name, size, unit, price, company);
+    const stock = new Stock(type, origin, name, size, unit, price, company);
 
-    await db.data?.items.push(item);
+    await db.data?.stocks.push(stock);
 
     await db.write();
 
-    return item;
+    return stock;
   }
 
   // 특정 회사가 가지고 있는 모든 품목 조회
   static findByCompany(company) {
-    const items = db.data?.items;
+    const stocks = db.data?.stocks;
     let result = [];
-    for (const item of items) {
-      if (item.company === company) {
-        result.push(item);
+    for (const stock of stocks) {
+      if (stock.company === company) {
+        result.push(stock);
       }
     }
     return result;
   }
 }
 
-export default Item;
+export default Stock;
