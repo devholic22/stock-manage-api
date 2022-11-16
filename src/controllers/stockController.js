@@ -1,31 +1,59 @@
+import Company from "../models/Company.js";
 import Stock from "../models/Stock.js";
+import StockType from "../models/StockType.js";
 
 export const uploadStock = async (req, res) => {
   const { type, origin, name, size, unit, price } = req.body;
-  const stocksOfUserCompany = Stock.findByCompany(req.user.user_com);
 
-  for (const stock of stocksOfUserCompany) {
-    if (stock.name === name) {
-      return res.json({
-        error: "이미 등록되어 있는 제품입니다."
-      });
+  const company = Company.findByNumber(req.user.user_com);
+
+  let existType = null;
+  let result = null;
+  for (let i = 0; i < company.size; i++) {
+    if (company.types[i].name === type) {
+      existType = company.types[i];
+      break;
     }
   }
 
-  const stock = await Stock.create(
-    type,
-    origin,
-    name,
-    size,
-    unit,
-    price,
-    req.user.user_com
-  );
+  if (existType) {
+    const stocks = StockType.traverse(existType.company, existType.number);
 
-  return res.json(stock);
+    for (const c of stocks) {
+      if (c === name) {
+        return res.json({
+          error: "이미 등록되어 있는 품목입니다."
+        });
+      }
+    }
+    const stock = await Stock.create(
+      existType,
+      origin,
+      name,
+      size,
+      unit,
+      price,
+      company
+    );
+    result = await StockType.append(existType, stock);
+  } else {
+    const newType = await StockType.create(type, company);
+
+    const stock = await Stock.create(
+      newType,
+      origin,
+      name,
+      size,
+      unit,
+      price,
+      company
+    );
+    result = await StockType.append(newType, stock);
+  }
+  return res.json(result);
 };
 
 export const allStockOfUserCompany = (req, res) => {
   const { user } = req;
-  return res.json(Stock.findByCompany(user.user_com));
+  return res.json(Company.findAll(user.user_com));
 };
