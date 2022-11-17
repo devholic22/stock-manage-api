@@ -1,4 +1,5 @@
 import { db } from "../models/index.js";
+import StockType from "./StockType.js";
 
 class Company {
   constructor(comName) {
@@ -73,7 +74,16 @@ class Company {
 
   static findAll(number) {
     const company = Company.findByNumber(number);
-    return company.types;
+    const result = [];
+    let temp = null;
+
+    for (const type of company.types) {
+      temp = StockType.traverseValue(company.number, type.number);
+      for (const t of temp) {
+        result.push(t);
+      }
+    }
+    return result;
   }
 }
 

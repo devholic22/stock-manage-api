@@ -67,6 +67,25 @@ class StockType {
     }
     return result;
   }
+
+  static traverseValue(company_number, number) {
+    const target = StockType.findByNumber(company_number, number);
+    const result = [];
+    let curr = target.head;
+    while (curr) {
+      result.push({
+        number: curr.number,
+        origin: curr.origin,
+        name: curr.name,
+        size: curr.size,
+        unit: curr.unit,
+        count: curr.count,
+        price: curr.price
+      });
+      curr = curr.next;
+    }
+    return result;
+  }
 }
 
 export default StockType;
