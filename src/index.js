@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
+import cors from "cors";
 import { createConnection } from "./models/index.js";
 import globalRouter from "./routers/globalRouter.js";
 
@@ -12,6 +13,11 @@ app.use(express.urlencoded({ extended: false }));
 
 createConnection();
 
+app.use(
+  cors({
+    origin: ["http://localhost:3000"]
+  })
+);
 app.use(globalRouter);
 
 const handleListen = () => {
