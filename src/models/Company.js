@@ -8,6 +8,7 @@ class Company {
     this.comCode = new Date().getTime().toString(36);
     this.size = 0;
     this.number = db.data?.company.length + 1;
+    this.stocks = 0;
   }
 
   static async create(comName) {

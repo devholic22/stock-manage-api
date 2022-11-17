@@ -25,7 +25,7 @@ export const uploadStock = async (req, res) => {
         });
       }
     }
-    const stock = await Stock.create(
+    const stock = Stock.create(
       existType,
       origin,
       name,
@@ -39,7 +39,7 @@ export const uploadStock = async (req, res) => {
   } else {
     const newType = await StockType.create(type, company);
 
-    const stock = await Stock.create(
+    const stock = Stock.create(
       newType,
       origin,
       name,

@@ -18,6 +18,8 @@ class StockType {
   }
   static async append(stockType, stock) {
     const type = StockType.findByNumber(stockType.company, stockType.number);
+    const company = Company.findByNumber(stockType.company);
+
     if (!type.head) {
       type.head = stock;
     } else {
@@ -27,6 +29,8 @@ class StockType {
       }
       curr.next = stock;
     }
+
+    company.stocks += 1;
     type.size += 1;
 
     await db.write();

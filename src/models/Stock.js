@@ -3,8 +3,7 @@ import StockType from "./StockType.js";
 
 class Stock {
   constructor(type, origin, name, size, unit, price, dep, company) {
-    this.number =
-      db.data?.company[type.company - 1].types[type.number - 1].size + 1;
+    this.number = db.data?.company[type.company - 1].stocks + 1;
     this.origin = origin; // 제조사
     this.name = name; // 품명
     this.size = size; // 규격
@@ -19,7 +18,7 @@ class Stock {
     this.history = []; // 입고 별 기록
   }
 
-  static async create(type, origin, name, size, unit, price, dep, company) {
+  static create(type, origin, name, size, unit, price, dep, company) {
     const stock = new Stock(
       type,
       origin,
