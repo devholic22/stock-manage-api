@@ -3,10 +3,9 @@ import Stock from "../models/Stock.js";
 import StockType from "../models/StockType.js";
 
 export const uploadStock = async (req, res) => {
-  const { type, origin, name, size, unit, price } = req.body;
+  const { type, origin, name, size, unit, price, dep } = req.body;
 
   const company = Company.findByNumber(req.user.user_com);
-
   let existType = null;
   let result = null;
   for (let i = 0; i < company.size; i++) {
@@ -33,6 +32,7 @@ export const uploadStock = async (req, res) => {
       size,
       unit,
       price,
+      dep,
       company
     );
     result = await StockType.append(existType, stock);
@@ -46,6 +46,7 @@ export const uploadStock = async (req, res) => {
       size,
       unit,
       price,
+      dep,
       company
     );
     result = await StockType.append(newType, stock);
@@ -55,5 +56,17 @@ export const uploadStock = async (req, res) => {
 
 export const allStockOfUserCompany = (req, res) => {
   const { user } = req;
-  return res.json(Company.findAll(user.user_com));
+  if (!Boolean(req.query.type) || !Boolean(req.query.stock)) {
+    return res.json(Company.findAll(user.user_com));
+  } else {
+    const type = req.query.type;
+    const stock = req.query.stock;
+    const result = Stock.findByNumber(user.user_com, type, stock);
+    if (!result) {
+      return res.json({
+        error: "분류 넘버 또는 품목 번호가 올바르지 않습니다."
+      });
+    }
+    return res.json(result);
+  }
 };
