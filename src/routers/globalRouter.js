@@ -1,5 +1,8 @@
 import { Router } from "express";
-import { allStockOfUserCompany } from "../controllers/stockController.js";
+import {
+  allStockOfUserCompany,
+  editStock
+} from "../controllers/stockController.js";
 import {
   postJoinAdmin,
   postJoinUser,
@@ -11,6 +14,7 @@ import stockRouter from "../routers/stockRouter.js";
 const router = Router();
 
 router.get("/", authMiddleware, allStockOfUserCompany);
+router.put("/", authMiddleware, editStock);
 
 router.post("/signup/admin", postJoinAdmin);
 router.post("/signup/user", postJoinUser);

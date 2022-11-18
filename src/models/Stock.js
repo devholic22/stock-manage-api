@@ -61,8 +61,24 @@ class Stock {
     }
     result = curr;
     delete result["next"];
-    delete result["company"];
+    // delete result["company"];
     return result;
+  }
+
+  static async update(stock, type, data) {
+    const target = Stock.findByNumber(stock.company, type, stock.number);
+
+    target.origin = data.origin;
+    target.name = data.name;
+    target.size = data.size;
+    target.unit = data.unit;
+    target.price = data.price;
+    target.count = data.count;
+    target.dep = data.dep;
+
+    await db.write();
+
+    return target;
   }
 }
 
