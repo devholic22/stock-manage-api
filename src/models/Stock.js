@@ -16,6 +16,7 @@ class Stock {
     this.company = company.number; // 회사
     this.next = null;
     this.history = []; // 입고 별 기록
+    this.graph = []; // 그래프
   }
 
   static create(type, origin, name, size, unit, price, dep, company) {
@@ -50,6 +51,10 @@ class Stock {
     let result = {};
     let i = 0;
     while (i < number - 1) {
+      if (curr.next === undefined) {
+        curr = null;
+        break;
+      }
       curr = curr.next;
       i++;
     }
@@ -78,10 +83,20 @@ class Stock {
     return target;
   }
 
-  static async addHistory(count, memo, company, type, number) {
+  static async addHistory(day, count, memo, company, type, number) {
     const stock = Stock.findByNumber(company, type, number);
-    const history = await History.create(count, memo, company, type, number);
+    const history = await History.create(
+      day,
+      count,
+      memo,
+      company,
+      type,
+      number
+    );
+    const temp = {};
+    temp[day] = count;
     stock.history.push(history);
+    stock.graph.push(temp);
     await db.write();
     return history;
   }

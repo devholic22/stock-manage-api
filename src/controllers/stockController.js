@@ -96,7 +96,7 @@ export const editStock = async (req, res) => {
 export const addStock = async (req, res) => {
   const { user } = req;
   const { user_com } = user;
-  const { count, memo } = req.body;
+  const { count, memo, day } = req.body;
   const { type, stock } = req.query;
   if (!Boolean(type) || !Boolean(stock)) {
     return res.json({
@@ -110,9 +110,16 @@ export const addStock = async (req, res) => {
     });
   }
   // 다른 날짜에만 기록을 업로드할 수 있도록 설정
-  const existHistory = History.findByDate(new Date(), user_com, type, stock);
+  const existHistory = History.findByDate(day, user_com, type, stock);
   if (!existHistory) {
-    const history = await Stock.addHistory(count, memo, user_com, type, stock);
+    const history = await Stock.addHistory(
+      day,
+      count,
+      memo,
+      user_com,
+      type,
+      stock
+    );
     return res.json(history);
   }
 };

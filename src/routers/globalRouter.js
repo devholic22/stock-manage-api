@@ -11,6 +11,7 @@ import {
 import authMiddleware from "../middlewares/authValidate.js";
 import stockRouter from "../routers/stockRouter.js";
 import noticeRouter from "../routers/noticeRouter.js";
+import graphRouter from "../routers/graphRouter.js";
 
 const router = Router();
 
@@ -22,5 +23,6 @@ router.post("/signup/user", postJoinUser);
 router.post("/login", postLogin);
 router.use("/stock", authMiddleware, stockRouter);
 router.use("/notice", authMiddleware, noticeRouter);
+router.use("/graph", authMiddleware, graphRouter);
 
 export default router;

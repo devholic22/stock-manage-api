@@ -2,28 +2,27 @@ import { db } from "../models/index.js";
 import Stock from "./Stock.js";
 
 class History {
-  constructor(count, memo, company, type, stockNum) {
-    this.createdAt = History.dateFormat();
+  constructor(date, count, memo, company, type, stockNum) {
+    this.createdAt = date; // YYYY-MM-DD 형식
     this.count = count;
     this.memo = memo;
     this.company = company;
     this.type = type;
     this.stock = stockNum;
   }
-  static async create(count, memo, company, type, stockNum) {
+  static async create(date, count, memo, company, type, stockNum) {
     const targetStock = Stock.findByNumber(company, type, stockNum);
     targetStock.count += count;
     targetStock.value += count * targetStock.price;
     await db.write();
-    const history = new History(count, memo, company, type, stockNum);
+    const history = new History(date, count, memo, company, type, stockNum);
     return history;
   }
   static findByDate(date, company, type, stockNum) {
-    const day = History.dateFormat(date);
     const targetStock = Stock.findByNumber(company, type, stockNum);
     const logs = targetStock.history;
     for (const log of logs) {
-      if (log.createdAt == day) {
+      if (log.createdAt == date) {
         return log;
       }
     }
@@ -65,8 +64,18 @@ class History {
       targetStock.count += plus;
       targetStock.value += plus * targetStock.price;
     }
+    const graphs = targetStock.graph;
+    for (const i in graphs) {
+      if (Object.keys(graphs[i]) == target.createdAt) {
+        const temp = {};
+        temp[target.createdAt] = target.count + Math.abs(target.count - count);
+        targetStock.graph.splice(i, 1, temp);
+      }
+    }
+
     target.count = count;
     target.memo = memo;
+
     await db.write();
     return target;
   }
