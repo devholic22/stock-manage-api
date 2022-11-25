@@ -1,17 +1,18 @@
 import { db } from "../models/index.js";
 import passwordHash from "../functions/passwordHash.js";
 class User {
-  constructor(comCode, name, id, password) {
+  constructor(comCode, name, id, role, password) {
     this.number = db.data?.users.length + 1;
     this.comCode = comCode;
     this.name = name;
     this.id = id;
+    this.role = role;
     this.password = password;
   }
 
-  static async create(comCode, name, id, password) {
+  static async create(comCode, name, id, role, password) {
     const hashedPassword = await passwordHash(password, 5);
-    const user = new User(comCode, name, id, hashedPassword);
+    const user = new User(comCode, name, id, role, hashedPassword);
 
     await db.data?.users.push(user);
 

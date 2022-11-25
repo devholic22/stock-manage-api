@@ -14,7 +14,6 @@ class Stock {
     this.value = this.price * this.count; // 재고 금액 (단가 x 수량)
     this.company = company.number; // 회사
     this.next = null;
-    dep;
     this.history = []; // 입고 별 기록
   }
 

@@ -31,6 +31,20 @@ class Company {
     return type;
   }
 
+  static async appendNotice(number, notice) {
+    const company = Company.findByNumber(number);
+    company.notice.push(notice);
+    await db.write();
+    return notice;
+  }
+
+  static async shiftNotice(number) {
+    const company = Company.findByNumber(number);
+    const result = company.notice.shift();
+    await db.write();
+    return result;
+  }
+
   static findByNumber(number) {
     const companies = db.data?.company;
     let low = 0;

@@ -23,7 +23,7 @@ export const postJoinAdmin = async (req, res) => {
   }
 
   const company = await Company.create(comName);
-  const user = await User.create(company.comCode, name, id, password);
+  const user = await User.create(company.comCode, name, id, "admin", password);
 
   return res.json({
     comCode: user.comCode,
@@ -51,7 +51,7 @@ export const postJoinUser = async (req, res) => {
     });
   }
 
-  const user = await User.create(comCode, name, id, password);
+  const user = await User.create(comCode, name, id, "general", password);
 
   return res.json({
     comCode: user.comCode,

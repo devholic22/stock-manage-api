@@ -10,6 +10,7 @@ import {
 } from "../controllers/userController.js";
 import authMiddleware from "../middlewares/authValidate.js";
 import stockRouter from "../routers/stockRouter.js";
+import noticeRouter from "../routers/noticeRouter.js";
 
 const router = Router();
 
@@ -20,5 +21,6 @@ router.post("/signup/admin", postJoinAdmin);
 router.post("/signup/user", postJoinUser);
 router.post("/login", postLogin);
 router.use("/stock", authMiddleware, stockRouter);
+router.use("/notice", authMiddleware, noticeRouter);
 
 export default router;
