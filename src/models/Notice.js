@@ -17,6 +17,10 @@ class Notice {
     const result = await Company.shiftNotice(com);
     return result;
   }
+  static traverse(com) {
+    const company = Company.findByNumber(com);
+    return company.notice;
+  }
 }
 
 export default Notice;
