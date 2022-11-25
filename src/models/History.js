@@ -68,7 +68,7 @@ class History {
     for (const i in graphs) {
       if (Object.keys(graphs[i]) == target.createdAt) {
         const temp = {};
-        temp[target.createdAt] = target.count + Math.abs(target.count - count);
+        temp[target.createdAt] = parseInt(Object.values(graphs[i])) + count;
         targetStock.graph.splice(i, 1, temp);
       }
     }
