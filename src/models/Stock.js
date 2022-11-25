@@ -1,5 +1,6 @@
 import { db } from "../models/index.js";
 import StockType from "./StockType.js";
+import History from "./History.js";
 
 class Stock {
   constructor(type, origin, name, size, unit, price, dep, company) {
@@ -45,9 +46,6 @@ class Stock {
 
   static findByNumber(com_number, type_number, number) {
     const targetType = StockType.findByNumber(com_number, type_number);
-    if (!targetType) {
-      return null;
-    }
     let curr = targetType.head;
     let result = {};
     let i = 0;
@@ -78,6 +76,14 @@ class Stock {
     await db.write();
 
     return target;
+  }
+
+  static async addHistory(count, memo, company, type, number) {
+    const stock = Stock.findByNumber(company, type, number);
+    const history = await History.create(count, memo, company, type, number);
+    stock.history.push(history);
+    await db.write();
+    return history;
   }
 }
 

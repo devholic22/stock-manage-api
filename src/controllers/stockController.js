@@ -2,6 +2,7 @@ import Company from "../models/Company.js";
 import Notice from "../models/Notice.js";
 import Stock from "../models/Stock.js";
 import StockType from "../models/StockType.js";
+import History from "../models/History.js";
 
 export const uploadStock = async (req, res) => {
   const { type, origin, name, size, unit, price, dep } = req.body;
@@ -90,4 +91,54 @@ export const editStock = async (req, res) => {
   }
   const answer = await Stock.update(result, type, req.body);
   return res.json(answer);
+};
+
+export const addStock = async (req, res) => {
+  const { user } = req;
+  const { user_com } = user;
+  const { count, memo } = req.body;
+  const { type, stock } = req.query;
+  if (!Boolean(type) || !Boolean(stock)) {
+    return res.json({
+      error: "분류 넘버 또는 품목 번호가 올바르지 않습니다."
+    });
+  }
+  const target = Stock.findByNumber(user_com, type, stock);
+  if (!target) {
+    return res.json({
+      error: "분류 넘버 또는 품목 번호가 올바르지 않습니다."
+    });
+  }
+  // 다른 날짜에만 기록을 업로드할 수 있도록 설정
+  const existHistory = History.findByDate(new Date(), user_com, type, stock);
+  if (!existHistory) {
+    const history = await Stock.addHistory(count, memo, user_com, type, stock);
+    return res.json(history);
+  }
+};
+
+export const editHistory = async (req, res) => {
+  const { user } = req;
+  const { user_com } = user;
+  const { count, memo } = req.body;
+  const { type, stock, number } = req.query;
+  if (!Boolean(type) || !Boolean(stock) || !Boolean(number)) {
+    return res.json({
+      error: "분류 넘버, 품목 번호 또는 기록 넘버가 올바르지 않습니다."
+    });
+  }
+  const existHistory = History.findByNumber(user_com, type, stock, number);
+  if (existHistory) {
+    const edited = await History.editHistory(
+      user_com,
+      type,
+      stock,
+      number,
+      count,
+      memo
+    );
+    return res.json(edited);
+  } else {
+    return res.json({ error: "해당 기록이 없습니다." });
+  }
 };
