@@ -3,6 +3,7 @@ import Notice from "../models/Notice.js";
 import Stock from "../models/Stock.js";
 import StockType from "../models/StockType.js";
 import History from "../models/History.js";
+import User from "../models/User.js";
 
 export const uploadStock = async (req, res) => {
   const { type, origin, name, size, unit, price, dep } = req.body;
@@ -61,9 +62,17 @@ export const allStockOfUserCompany = (req, res) => {
   const type = req.query.type;
   const stock = req.query.stock;
   const notices = Notice.traverse(user.user_com);
+  const player = User.findByNumber(user.user_number);
+  const comName = Company.findByNumber(user.user_com).comName;
   if (!Boolean(type) || !Boolean(stock)) {
     const result = Company.findAll(user.user_com);
-    return res.json({ result, notices });
+    return res.json({
+      result,
+      notices,
+      name: player.name,
+      role: player.role,
+      com: comName
+    });
   }
   const result = Stock.findByNumber(user.user_com, type, stock);
   if (!result) {
@@ -71,7 +80,13 @@ export const allStockOfUserCompany = (req, res) => {
       error: "분류 넘버 또는 품목 번호가 올바르지 않습니다."
     });
   }
-  return res.json({ result, notices });
+  return res.json({
+    result,
+    notices,
+    name: player.name,
+    role: player.role,
+    com: comName
+  });
 };
 
 export const editStock = async (req, res) => {
