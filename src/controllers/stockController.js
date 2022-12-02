@@ -89,6 +89,30 @@ export const allStockOfUserCompany = (req, res) => {
   });
 };
 
+// 수정 페이지
+export const getEditPage = async (req, res) => {
+  const { user } = req;
+  const type = req.query.type;
+  const stock = req.query;
+  if (!Boolean(type) || !Boolean(stock)) {
+    return res.json({
+      error: "분류 넘버 또는 품목 번호가 올바르지 않습니다."
+    });
+  }
+  const result = Stock.findByNumber(user.user_com, type, stock);
+  if (!result) {
+    return res.json({
+      error: "분류 넘버 또는 품목 번호가 올바르지 않습니다."
+    });
+  }
+  if (result.edit !== null && result.edit != user.user_number) {
+    return res.json({
+      error: "다른 사람이 아직 편집 중 입니다."
+    });
+  }
+  await Stock.editState(result, type, user.user_number);
+  return res.send("편집 시작");
+};
 export const editStock = async (req, res) => {
   const { user } = req;
   const type = req.query.type;
@@ -102,6 +126,11 @@ export const editStock = async (req, res) => {
   if (!result) {
     return res.json({
       error: "분류 넘버 또는 품목 번호가 올바르지 않습니다."
+    });
+  }
+  if (result.edit !== null && result.edit != user.user_number) {
+    return res.json({
+      error: "다른 사람이 아직 편집 중 입니다."
     });
   }
   const answer = await Stock.update(result, type, req.body);

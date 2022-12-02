@@ -16,7 +16,7 @@ import graphRouter from "../routers/graphRouter.js";
 const router = Router();
 
 router.get("/", authMiddleware, allStockOfUserCompany);
-router.put("/", authMiddleware, editStock);
+// router.put("/", authMiddleware, editStock);
 
 router.post("/signup/admin", postJoinAdmin);
 router.post("/signup/user", postJoinUser);
