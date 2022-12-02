@@ -80,11 +80,15 @@ class StockType {
       result.push({
         number: curr.number,
         origin: curr.origin,
+        type: number,
         name: curr.name,
         size: curr.size,
         unit: curr.unit,
         count: curr.count,
-        price: curr.price
+        price: curr.price,
+        dep: curr.dep,
+        createdAt: curr.createdAt,
+        costUpdatedAt: curr.costUpdatedAt
       });
       curr = curr.next;
     }

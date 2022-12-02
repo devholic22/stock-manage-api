@@ -17,7 +17,9 @@ class Stock {
     this.next = null;
     this.history = []; // 입고 별 기록
     this.graph = []; // 그래프
-    this.edit = null; // 편집 중인 상태 (특정 사람의 id가 들어가 있는지)인지, 일반 상태 (null)인지
+    this.edit = null; // 편집 중인 상태 (특정 사람의 id가 들어가 있는지)인지, 일반 상태 (null)인지,
+    this.createdAt = new Date();
+    this.costUpdatedAt = new Date();
   }
 
   static create(type, origin, name, size, unit, price, dep, company) {
@@ -105,6 +107,15 @@ class Stock {
   static async editState(stock, type, number) {
     const target = Stock.findByNumber(stock.company, type, stock.number);
     target.edit = number;
+    await db.write();
+    return target;
+  }
+
+  static async updateCost(stock, com, year) {
+    const target = Stock.findByNumber(com, stock.type, stock.number);
+    target.price *= ((100 - target.dep) / 100) ** year;
+    target.value = target.count * target.price;
+    target.costUpdatedAt = new Date();
     await db.write();
     return target;
   }

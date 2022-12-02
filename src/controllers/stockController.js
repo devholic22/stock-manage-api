@@ -57,13 +57,26 @@ export const uploadStock = async (req, res) => {
   return res.json(result);
 };
 
-export const allStockOfUserCompany = (req, res) => {
+export const allStockOfUserCompany = async (req, res) => {
   const { user } = req;
   const type = req.query.type;
   const stock = req.query.stock;
   const notices = Notice.traverse(user.user_com);
   const player = User.findByNumber(user.user_number);
   const comName = Company.findByNumber(user.user_com).comName;
+
+  const allData = Company.findAll(user.user_com);
+  const now = new Date().getTime();
+  for await (const data of allData) {
+    let diffYear =
+      (now - new Date(data.costUpdatedAt).getTime()) /
+      (1000 * 60 * 60 * 24 * 30 * 12);
+    if (diffYear >= 1) {
+      console.log("가격 재조정");
+      await Stock.updateCost(data, user.user_com, Math.floor(diffYear));
+    }
+  }
+
   if (!Boolean(type) || !Boolean(stock)) {
     const result = Company.findAll(user.user_com);
     return res.json({
