@@ -62,6 +62,9 @@ export const allStockOfUserCompany = async (req, res) => {
   const type = req.query.type;
   const stock = req.query.stock;
   const notices = Notice.traverse(user.user_com);
+  if (notices.length > 5) {
+    await Company.shiftNotice(user.user_com);
+  }
   const player = User.findByNumber(user.user_number);
   const comName = Company.findByNumber(user.user_com).comName;
 
