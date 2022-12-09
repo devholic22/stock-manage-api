@@ -9,6 +9,7 @@ class Company {
     this.size = 0;
     this.number = db.data?.company.length + 1;
     this.stocks = 0;
+    this.notice = [];
   }
 
   static async create(comName) {
