@@ -51,12 +51,14 @@ class Stock {
   }
 
   static findByNumber(com_number, type_number, number) {
-    console.log(type_number, number);
     const targetType = StockType.findByNumber(com_number, type_number);
+    if (!targetType) {
+      return null;
+    }
     let curr = targetType.head;
     let result = {};
     let i = 0;
-    while (i < number - 1) {
+    while (i < number - 1 && curr) {
       if (curr.next === undefined) {
         curr = null;
         break;
