@@ -79,6 +79,7 @@ class StockType {
     while (curr) {
       result.push({
         number: curr.number,
+        numberInType: curr.numberInType,
         origin: curr.origin,
         type: number,
         name: curr.name,

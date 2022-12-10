@@ -5,6 +5,8 @@ import History from "./History.js";
 class Stock {
   constructor(type, origin, name, size, unit, price, dep, company) {
     this.number = db.data?.company[type.company - 1].stocks + 1;
+    this.numberInType =
+      db.data?.company[type.company - 1].types[type.number - 1].size + 1;
     this.origin = origin; // 제조사
     this.name = name; // 품명
     this.size = size; // 규격
@@ -90,7 +92,7 @@ class Stock {
     const stock = Stock.findByNumber(company, type, number);
     const history = await History.create(
       day,
-      count,
+      Number(count),
       memo,
       company,
       type,
