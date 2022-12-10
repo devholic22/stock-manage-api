@@ -51,6 +51,7 @@ class Stock {
   }
 
   static findByNumber(com_number, type_number, number) {
+    console.log(type_number, number);
     const targetType = StockType.findByNumber(com_number, type_number);
     let curr = targetType.head;
     let result = {};
@@ -67,7 +68,7 @@ class Stock {
       return null;
     }
     result = curr;
-    delete result["next"];
+    // delete result["next"];
     // delete result["company"];
     return result;
   }
