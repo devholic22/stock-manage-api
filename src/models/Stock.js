@@ -7,7 +7,7 @@ class Stock {
     this.number = db.data?.company[type.company - 1].stocks + 1;
     this.numberInType =
       db.data?.company[type.company - 1].types[type.number - 1].size + 1;
-    this.type = type.number - 1;
+    this.type = type.number;
     this.origin = origin; // 제조사
     this.name = name; // 품명
     this.size = size; // 규격
